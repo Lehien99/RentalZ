@@ -1,5 +1,5 @@
 import { RefresherEventDetail } from '@ionic/core';
-import { IonContent, IonHeader, IonItem, IonList, IonPage, IonRefresher, IonRefresherContent, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonHeader, IonItem, IonList, IonPage, IonRefresher, IonRefresherContent, IonTitle, IonToolbar, useIonViewWillEnter } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { getAllProducts } from '../databaseHandler';
 import { Product } from '../models';
@@ -14,10 +14,13 @@ const Home: React.FC = () => {
     console.log(products)
   }
   //it will run at least once every time the page is rendered
-
-  useEffect(() => {
+  // useEffect(() => {
+  //   fetchData();
+  // }, [])
+  //it helps to refresh the home when you navigate between pages
+  useIonViewWillEnter(()=>{
     fetchData();
-  }, [])
+  })
   async function refreshTheData(event: any) {
     await fetchData() //to update customer list again
     setTimeout(() => { //pause some time to show the effect: refreshing
@@ -52,15 +55,15 @@ const Home: React.FC = () => {
             </IonItem>
             {
               products.map((c, i) =>
-                <IonItem button key={i} routerLink={'/detail/' + c.id} >
+                <IonItem button key={i} routerLink={'/details/' + c.id} >
                   <IonItem >{c.id} </IonItem>
-                  <IonItem >{c.reporter}</IonItem>
+                  {/* <IonItem >{c.reporter}</IonItem>
                   <IonItem >{c.propertyType} </IonItem>
                   <IonItem >{c.bedroom}</IonItem>
                   <IonItem ></IonItem>
                   <IonItem >{c.price}</IonItem>
                   <IonItem >{c.note}</IonItem>
-                  <IonItem >{c.Furniture}</IonItem>
+                  <IonItem >{c.Furniture}</IonItem> */}
                 
                 </IonItem>
 

@@ -7,6 +7,37 @@ initDB().then(() => {
     console.log("Init database done!", DATABASE_NAME)
 })
 
+export async function updateProduct(product:Product) {
+    //find in the database with the id
+    const db = await openDB(DATABASE_NAME, 1);
+    const tx = db.transaction('products', 'readwrite');
+    const store = tx.objectStore('products');
+    var updateProduct = await store.get(product.id!) as Product
+    //update the found record with new values
+    updateProduct.propertyType  = product.propertyType
+    updateProduct.bedroom = product.bedroom
+    updateProduct.price = product.price
+    updateProduct.Furniture = product.Furniture
+    updateProduct.note = product.note
+    updateProduct.reporter  = product.reporter
+    updateProduct.dateandtime  = product.dateandtime
+    //really do the update: from memory ->database
+    db.put("products",updateProduct);
+    await tx.done;
+}
+
+export async function deleteProduct(id:number) {
+    const db = await openDB(DATABASE_NAME, 1);
+    await db.delete("products",id);
+}
+
+export async function getProduct(id:number) {
+    const db = await openDB(DATABASE_NAME, 1);
+    const product = await db.get('products',id)
+    console.log("i am getting the product "+ product)
+    return product ;
+}
+
 export async function getAllProducts() {
     const db = await openDB(DATABASE_NAME, 1);
     var cursor = await db.transaction("products").objectStore("products").openCursor();
