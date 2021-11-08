@@ -11,10 +11,11 @@ const Home: React.FC = () => {
 
 
   async function search(searchText:string){
+    
     let allProducts = await getAllProducts();
     console.log("you are search for:" + searchText)
     var filtereData = allProducts.filter(function(obj){
-      return obj.reporter == searchText
+      return obj.reporter.includes(searchText);
     });
     // console.log(filtereData)
     setProduct(filtereData)
