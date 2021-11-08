@@ -1,5 +1,5 @@
 import { RefresherEventDetail } from '@ionic/core';
-import { IonContent, IonHeader, IonItem, IonList, IonPage, IonRefresher, IonRefresherContent, IonTitle, IonToolbar, useIonViewWillEnter } from '@ionic/react';
+import { IonContent, IonHeader, IonItem, IonList, IonPage, IonRefresher, IonRefresherContent, IonSearchbar, IonTitle, IonToolbar, useIonViewWillEnter } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { getAllProducts } from '../databaseHandler';
 import { Product } from '../models';
@@ -7,11 +7,25 @@ import { Product } from '../models';
 
 const Home: React.FC = () => {
   const [products, setProduct] = useState<Product[]>([]);
+  // const [searchText, setSearchText] = useState('');
 
+
+  async function search(searchText:string){
+    let allProducts = await getAllProducts();
+    console.log("you are search for:" + searchText)
+    var filter = "reporter"
+    var filtereData = allProducts.filter(function(obj){
+      return obj.reporter == searchText
+    });
+    // console.log(filtereData)
+    setProduct(filtereData)
+
+  }
   async function fetchData() {
+  
     let allProducts = await getAllProducts();
     setProduct(allProducts)
-    console.log(products)
+    // console.log(allProducts)
   }
   //it will run at least once every time the page is rendered
   // useEffect(() => {
@@ -37,6 +51,8 @@ const Home: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding" >
+        <IonSearchbar  onIonChange={e => search(e.detail.value!)}></IonSearchbar>
+
         <IonRefresher slot='fixed' onIonRefresh={refreshTheData}>
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
@@ -57,8 +73,8 @@ const Home: React.FC = () => {
               products.map((c, i) =>
                 <IonItem button key={i} routerLink={'/details/' + c.id} >
                   <IonItem >{c.id} </IonItem>
-                  {/* <IonItem >{c.reporter}</IonItem>
-                  <IonItem >{c.propertyType} </IonItem>
+                  <IonItem >{c.reporter}</IonItem>
+                  {/*<IonItem >{c.propertyType} </IonItem>
                   <IonItem >{c.bedroom}</IonItem>
                   <IonItem ></IonItem>
                   <IonItem >{c.price}</IonItem>
