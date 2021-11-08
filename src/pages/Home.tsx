@@ -13,7 +13,6 @@ const Home: React.FC = () => {
   async function search(searchText:string){
     let allProducts = await getAllProducts();
     console.log("you are search for:" + searchText)
-    var filter = "reporter"
     var filtereData = allProducts.filter(function(obj){
       return obj.reporter == searchText
     });
